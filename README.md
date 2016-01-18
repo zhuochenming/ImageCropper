@@ -24,4 +24,4 @@
     
     [self.navigationController pushViewController:crop animated:YES];
     
-(https://github.com/ZhuoChenMing/ImageCropper/blob/master/sc.png)
+ ![image](https://github.com/ZhuoChenMing/ImageCropper/blob/master/sc.png)
