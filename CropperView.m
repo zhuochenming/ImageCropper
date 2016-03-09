@@ -48,6 +48,8 @@ static CGSize minSize = {40, 40};
 // Overlay view
 @property (nonatomic, strong) OverlayView *overlayView;
 
+@property (nonatomic, strong) NSMutableArray *rectArray;
+
 @end
 
 @implementation CropperView
@@ -62,14 +64,16 @@ static CGSize minSize = {40, 40};
         self.whichRect = 0;
         
         self.imageView = [[UIImageView alloc] initWithImage:image];
-        CGRect frame;
-        frame.origin = CGPointMake(frame.origin.x, frame.origin.y);
-        frame.size = [self getImageSizeForPreview:image];
-        self.imageView.frame = frame;
+        
+        CGRect rect;
+        rect.size = [self getImageSizeForPreview:image];
+        rect.origin = CGPointMake((frame.size.width - rect.size.width) / 2.0, (frame.size.height - rect.size.height) / 2.0);
+        
+        self.imageView.frame = rect;
         
         self.baseRect = self.imageView.frame;
         
-        [self addSubview:self.imageView];
+        [self addSubview:_imageView];
         
         //        // Pinch
         //        UIPinchGestureRecognizer *pinchGestureRecognizer = [[UIPinchGestureRecognizer alloc] initWithTarget:self
@@ -87,12 +91,22 @@ static CGSize minSize = {40, 40};
         self.overlayView = [[OverlayView alloc] initWithFrame:self.frame];
         self.overlayView.rectArray = [NSMutableArray arrayWithArray:rectArray];
         
-        [self addSubview:self.overlayView];
+        [self addSubview:_overlayView];
         
         self.overlayView.whichRect = 0;
         [self.overlayView setNeedsDisplay];
     }
     return self;
+}
+
+- (void)addCropRect:(CGRect)rect {
+    [self.overlayView.rectArray addObject:NSStringFromCGRect(rect)];
+    [self.overlayView setNeedsDisplay];
+}
+
+- (void)removeCropRectByIndex:(NSInteger)index {
+    [self.overlayView.rectArray removeObjectAtIndex:index];
+    [self.overlayView setNeedsDisplay];
 }
 
 #pragma mark - 获取图片

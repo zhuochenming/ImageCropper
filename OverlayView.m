@@ -12,6 +12,13 @@
 
 @implementation OverlayView
 
+- (NSMutableArray *)rectArray {
+    if (_rectArray == nil) {
+        _rectArray = [NSMutableArray arrayWithCapacity:0];
+    }
+    return _rectArray;
+}
+
 - (id)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
