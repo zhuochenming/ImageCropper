@@ -9,7 +9,7 @@
 #import "CropperViewController.h"
 #import "CropperView.h"
 
-#define bottomViewHeight 80
+#define bottomViewHeight 60
 
 @interface CropperViewController ()
 
@@ -33,7 +33,7 @@
         CGFloat screenWidth = [UIScreen mainScreen].bounds.size.width;
         CGFloat screenHeight = [UIScreen mainScreen].bounds.size.height;
         CGFloat left = 50;
-        CGFloat cropWidth = screenWidth - left * 2.0;
+        CGFloat cropWidth = ScreenWidth - left * 2.0;
         CGRect rect = CGRectMake(left, (screenHeight - bottomViewHeight) / 2.0 - 100, cropWidth, 100);
         _rect = rect;
         
@@ -41,12 +41,11 @@
 //        [self.imageCropperView setConstrain:CGSizeMake(30, 10)];
         [self.view addSubview:_imageCropperView];
         
-
         UIView *bottomView = [[UIView alloc] initWithFrame:CGRectMake(0, screenHeight - bottomViewHeight, screenWidth, bottomViewHeight)];
-        bottomView.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.6];
+        bottomView.backgroundColor = RGBA(0, 0, 0, 0.6);
         bottomView.userInteractionEnabled = YES;
         
-        CGFloat buttonTop = 20;
+        CGFloat buttonTop = 10;
         CGFloat buttonHeight = bottomViewHeight - buttonTop * 2;
         
         UIButton *cancleButton = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -56,13 +55,12 @@
         [cancleButton setTitle:@"取消" forState:UIControlStateNormal];
         [cancleButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         [bottomView addSubview:cancleButton];
-        
-        
+ 
         CGFloat imageButtonWidth = (screenWidth - 100 - 30) / 2.0;
         
         UIButton *addButton = [UIButton buttonWithType:UIButtonTypeCustom];
         addButton.frame = CGRectMake(CGRectGetMaxX(cancleButton.frame) + 10, buttonTop, imageButtonWidth, buttonHeight);
-        [addButton addTarget:self action:@selector(add) forControlEvents:UIControlEventTouchUpInside];
+        [addButton addTarget:self action:@selector(add:) forControlEvents:UIControlEventTouchUpInside];
         addButton.backgroundColor = [UIColor clearColor];
         [addButton setImage:[UIImage imageNamed:@"chapter_plus_green"] forState:UIControlStateNormal];
         [addButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
@@ -85,10 +83,12 @@
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
-- (void)add {
+- (void)add:(UIButton *)button {
     if (_flag) {
+        [button setImage:[UIImage imageNamed:@"reduce"] forState:UIControlStateNormal];        
         [_imageCropperView addCropRect:CGRectMake(CGRectGetMinX(_rect), CGRectGetMaxY(_rect) + 10, CGRectGetWidth(_rect), CGRectGetHeight(_rect))];
     } else {
+        [button setImage:[UIImage imageNamed:@"chapter_plus_green"] forState:UIControlStateNormal];
         [_imageCropperView removeCropRectByIndex:1];
     }
     _flag = !_flag;

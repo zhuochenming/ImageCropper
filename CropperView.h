@@ -20,10 +20,8 @@
 //截图
 - (NSArray *)cropedImageArray;
 
-//添加截图框
 - (void)addCropRect:(CGRect)rect;
 
-//移除某一个截图框
 - (void)removeCropRectByIndex:(NSInteger)index;
 
 //- (void)getClearRect;

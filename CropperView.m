@@ -91,8 +91,17 @@ static CGSize minSize = {40, 40};
         self.overlayView = [[OverlayView alloc] initWithFrame:self.frame];
         self.overlayView.rectArray = [NSMutableArray arrayWithArray:rectArray];
         
+        for (int i = 0; i < rectArray.count; i++) {
+            UILabel *lable = [[UILabel alloc] initWithFrame:CGRectFromString(rectArray[i])];
+            lable.textAlignment = NSTextAlignmentCenter;
+            lable.font = [UIFont systemFontOfSize:15];
+            lable.text = @"小七说：";
+            lable.tag = 1000 + i;
+            lable.textColor = [UIColor redColor];
+            [self.overlayView addSubview:lable];
+        }
+
         [self addSubview:_overlayView];
-        
         self.overlayView.whichRect = 0;
         [self.overlayView setNeedsDisplay];
     }
@@ -100,11 +109,24 @@ static CGSize minSize = {40, 40};
 }
 
 - (void)addCropRect:(CGRect)rect {
+    
+    UILabel *lable = [[UILabel alloc] initWithFrame:rect];
+    lable.textAlignment = NSTextAlignmentCenter;
+    lable.font = [UIFont systemFontOfSize:15];
+    lable.text = @"我是大逗比";
+    lable.textColor = [UIColor redColor];
+    lable.tag = self.overlayView.rectArray.count + 1000;
+    [self.overlayView addSubview:lable];
+    
     [self.overlayView.rectArray addObject:NSStringFromCGRect(rect)];
     [self.overlayView setNeedsDisplay];
 }
 
 - (void)removeCropRectByIndex:(NSInteger)index {
+    
+    UILabel *lable = [self.overlayView viewWithTag:1000 + index];
+    [lable removeFromSuperview];
+    
     [self.overlayView.rectArray removeObjectAtIndex:index];
     [self.overlayView setNeedsDisplay];
 }
@@ -311,6 +333,10 @@ static CGSize minSize = {40, 40};
     [self.overlayView.rectArray removeObjectAtIndex:self.whichRect];
     [self.overlayView.rectArray insertObject:NSStringFromCGRect(newClearRect) atIndex:self.whichRect];
     
+    //控制clearrect的lable的frame
+    UILabel *lable = [self.overlayView viewWithTag:_whichRect + 1000];
+    lable.frame = newClearRect;
+    
     [self.overlayView setNeedsDisplay];
 }
 
@@ -319,7 +345,7 @@ static CGSize minSize = {40, 40};
     CGRect newClearRect = self.overlayView.clearRect;
     
     CGFloat width = self.frame.size.width;
-    CGFloat height = self.frame.size.height - 64;
+    CGFloat height = CGRectGetHeight(_imageView.frame) + CGRectGetMinY(_imageView.frame);
     
     newClearRect.origin.x += d.x;
     newClearRect.origin.y += d.y;
@@ -330,14 +356,18 @@ static CGSize minSize = {40, 40};
         newClearRect.origin.x = width - newClearRect.size.width;
     }
     
-    if (newClearRect.origin.y <= 0) {
-        newClearRect.origin.y = 0;
+    if (newClearRect.origin.y <= CGRectGetMinY(_imageView.frame)) {
+        newClearRect.origin.y = CGRectGetMinY(_imageView.frame);
     } else if (newClearRect.origin.y + newClearRect.size.height >= height) {
         newClearRect.origin.y = height - newClearRect.size.height;
     }
     
     [self.overlayView.rectArray removeObjectAtIndex:self.whichRect];
     [self.overlayView.rectArray insertObject:NSStringFromCGRect(newClearRect) atIndex:self.whichRect];
+    
+    //控制clearrect的lable的frame
+    UILabel *lable = [self.overlayView viewWithTag:_whichRect + 1000];
+    lable.frame = newClearRect;
     
     [self.overlayView setNeedsDisplay];
 }
