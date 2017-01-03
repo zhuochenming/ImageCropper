@@ -1,16 +1,13 @@
 //
 //  CropperView.m
-//  封装
+//  ImageCropper
 //
-//  Created by 酌晨茗 on 16/1/8.
-//  Copyright © 2016年 酌晨茗. All rights reserved.
+//  Created by Zhuochenming on 16/1/8.
+//  Copyright © 2016年 Zhuochenming. All rights reserved.
 //
 
 #import "CropperView.h"
 #import "OverlayView.h"
-
-#define ClearRectHeight 100
-#define ClearRectOffset 50
 
 typedef NS_ENUM(NSUInteger, OverlayViewPanningMode) {
     OverlayViewPanningModeNone     = 0,
@@ -20,7 +17,7 @@ typedef NS_ENUM(NSUInteger, OverlayViewPanningMode) {
     OverlayViewPanningModeBottom   = 1 << 3
 };
 
-static CGSize minSize = {40, 40};
+static CGSize const minSize = {40, 40};
 
 @interface CropperView ()
 
@@ -75,11 +72,6 @@ static CGSize minSize = {40, 40};
         
         [self addSubview:_imageView];
         
-        //        // Pinch
-        //        UIPinchGestureRecognizer *pinchGestureRecognizer = [[UIPinchGestureRecognizer alloc] initWithTarget:self
-        //                                                                                                     action:@selector(pinchGesture:)];
-        //        [self addGestureRecognizer:pinchGestureRecognizer];
-        
         UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapGesture:)];
         [self addGestureRecognizer:tap];
         
@@ -127,6 +119,7 @@ static CGSize minSize = {40, 40};
     UILabel *lable = [self.overlayView viewWithTag:1000 + index];
     [lable removeFromSuperview];
     
+    self.overlayView.whichRect = 0;
     [self.overlayView.rectArray removeObjectAtIndex:index];
     [self.overlayView setNeedsDisplay];
 }

@@ -1,14 +1,14 @@
 //
 //  OverlayView.m
-//  封装
+//  ImageCropper
 //
-//  Created by 酌晨茗 on 16/1/8.
-//  Copyright © 2016年 酌晨茗. All rights reserved.
+//  Created by Zhuochenming on 16/1/8.
+//  Copyright © 2016年 Zhuochenming. All rights reserved.
 //
 
 #import "OverlayView.h"
 
-#define SIZE 30.0f
+static CGFloat const SIZE = 30.0;
 
 @implementation OverlayView
 
@@ -39,7 +39,7 @@
     CGContextAddRect(contextRef, CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height));
     CGContextFillPath(contextRef);
     
-#pragma mark - 透明区域
+    //透明区域
     for (int i = 0; i < self.rectArray.count; i++) {
         CGRect storeRect = self.clearRect;
         self.clearRect = CGRectFromString(self.rectArray[i]);
@@ -163,7 +163,7 @@
 #pragma - 网格
 - (void)createGridWithContextRef:(CGContextRef)contextRef {
     CGContextSetStrokeColorWithColor(contextRef, [UIColor whiteColor].CGColor);
-    CGContextSetLineWidth(contextRef, 1);
+    CGContextSetLineWidth(contextRef, 0.5);
     CGContextAddRect(contextRef, self.clearRect);
     
     CGPoint from, to;
@@ -196,7 +196,7 @@
 #pragma mark - 焦点透明区域
 - (void)panToTopRectWithContextRef:(CGContextRef)contextRef {
     CGRect storeRect = self.clearRect;
-    self.clearRect = CGRectFromString(self.rectArray[self.whichRect]);
+    self.clearRect = CGRectFromString(self.rectArray[_whichRect]);
     [self createClearRectWithContextRef:contextRef];
     self.clearRect = storeRect;
 }

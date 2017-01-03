@@ -1,9 +1,9 @@
 //
 //  CropperView.h
-//  封装
+//  ImageCropper
 //
-//  Created by 酌晨茗 on 16/1/8.
-//  Copyright © 2016年 酌晨茗. All rights reserved.
+//  Created by Zhuochenming on 16/1/8.
+//  Copyright © 2016年 Zhuochenming. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
@@ -23,12 +23,5 @@
 - (void)addCropRect:(CGRect)rect;
 
 - (void)removeCropRectByIndex:(NSInteger)index;
-
-//- (void)getClearRect;
-//
-//- (void)square;
-//
-//网格大小比例
-//- (void)setConstrain:(CGSize)size;
 
 @end
