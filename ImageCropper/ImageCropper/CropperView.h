@@ -13,9 +13,7 @@
 @property (nonatomic, strong) UIImage *image;
 
 //初始化
-- (instancetype)initWithFrame:(CGRect)frame
-              image:(UIImage *)image
-          rectArray:(NSArray *)rectArray;
+- (instancetype)initWithFrame:(CGRect)frame image:(UIImage *)image rectArray:(NSArray *)rectArray;
 
 //截图
 - (NSArray *)cropedImageArray;

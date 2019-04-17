@@ -9,7 +9,7 @@
 #import "CropperViewController.h"
 #import "CropperView.h"
 
-static CGFloat const BottomViewHeight = 50.0;
+static CGFloat const kBottomViewHeight = 50.0;
 
 @interface CropperViewController ()
 
@@ -29,17 +29,10 @@ static CGFloat const BottomViewHeight = 50.0;
     [super viewDidLoad];
     
     self.title = @"裁减";
-
     if (_image == nil) {
         NSAssert(_image = nil, @"图片参数必须有值，不能为空");
     }
     
-    [self configuationView];
-    
-    // Do any additional setup after loading the view.
-}
-
-- (void)configuationView {
     self.flag = YES;
     
     CGFloat screenWidth = [UIScreen mainScreen].bounds.size.width;
@@ -47,18 +40,18 @@ static CGFloat const BottomViewHeight = 50.0;
     CGFloat left = 50;
     
     CGFloat cropWidth = screenWidth - left * 2.0;
-    CGRect rect = CGRectMake(left, (screenHeight - BottomViewHeight) / 2.0 - 100, cropWidth, 100);
+    CGRect rect = CGRectMake(left, (screenHeight - kBottomViewHeight) / 2.0 - 100, cropWidth, 100);
     self.rect = rect;
     
-    self.imageCropperView = [[CropperView alloc] initWithFrame:CGRectMake(0, 0, screenWidth, screenHeight - BottomViewHeight) image:_image rectArray:@[NSStringFromCGRect(rect)]];
+    self.imageCropperView = [[CropperView alloc] initWithFrame:CGRectMake(0, 0, screenWidth, screenHeight - kBottomViewHeight) image:_image rectArray:@[NSStringFromCGRect(rect)]];
     [self.view addSubview:_imageCropperView];
     
-    UIView *bottomView = [[UIView alloc] initWithFrame:CGRectMake(0, screenHeight - BottomViewHeight, screenWidth, BottomViewHeight)];
+    UIView *bottomView = [[UIView alloc] initWithFrame:CGRectMake(0, screenHeight - kBottomViewHeight, screenWidth, kBottomViewHeight)];
     bottomView.backgroundColor = [UIColor whiteColor];
     bottomView.userInteractionEnabled = YES;
     
     CGFloat buttonTop = 10;
-    CGFloat buttonHeight = BottomViewHeight - buttonTop * 2;
+    CGFloat buttonHeight = kBottomViewHeight - buttonTop * 2;
     
     UIButton *cancleButton = [UIButton buttonWithType:UIButtonTypeCustom];
     cancleButton.frame = CGRectMake(0, buttonTop, 50, buttonHeight);
@@ -91,8 +84,9 @@ static CGFloat const BottomViewHeight = 50.0;
     
 }
 
+#pragma mark - 按钮点击事件
 - (void)cancle {
-    [self dismissViewControllerAnimated:YES completion:nil];
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (void)add:(UIButton *)button {
@@ -121,15 +115,5 @@ static CGFloat const BottomViewHeight = 50.0;
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end

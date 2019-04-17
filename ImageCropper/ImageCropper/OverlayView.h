@@ -9,6 +9,8 @@
 #import <UIKit/UIKit.h>
 
 @interface OverlayView : UIView
+//基准透明区域，不可赋初始值
+@property (nonatomic, assign) CGRect clearRect;
 
 //拐角
 @property (readonly) CGRect topLeftCorner;
@@ -20,13 +22,11 @@
 @property (readonly) CGRect rightEdgeRect;
 @property (readonly) CGRect bottomEdgeRect;
 @property (readonly) CGRect leftEdgeRect;
-//基准透明区域，不可赋初始值
-@property (nonatomic, assign) CGRect clearRect;
 
 //透明区域数组
 @property (nonatomic, strong) NSMutableArray *rectArray;
 
-//焦点透明区域
+//焦点透明区域(当前激活的透明区域)
 @property (nonatomic, assign) NSInteger whichRect;
 
 @property (nonatomic, assign) CGSize maxSize;

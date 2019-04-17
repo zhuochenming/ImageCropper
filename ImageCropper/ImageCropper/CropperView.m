@@ -9,12 +9,12 @@
 #import "CropperView.h"
 #import "OverlayView.h"
 
-typedef NS_ENUM(NSUInteger, OverlayViewPanningMode) {
-    OverlayViewPanningModeNone     = 0,
-    OverlayViewPanningModeLeft     = 1 << 0,
-    OverlayViewPanningModeRight    = 1 << 1,
-    OverlayViewPanningModeTop      = 1 << 2,
-    OverlayViewPanningModeBottom   = 1 << 3
+typedef NS_ENUM(NSUInteger, kOverlayViewPanningMode) {
+    kOverlayViewPanningModeNone     = 0,
+    kOverlayViewPanningModeLeft     = 1 << 0,
+    kOverlayViewPanningModeRight    = 1 << 1,
+    kOverlayViewPanningModeTop      = 1 << 2,
+    kOverlayViewPanningModeBottom   = 1 << 3
 };
 
 static CGSize const minSize = {40, 40};
@@ -25,7 +25,7 @@ static CGSize const minSize = {40, 40};
 @property (nonatomic, assign) CGPoint firstTouchedPoint;
 
 // Panning mode for oeverlay view
-@property (nonatomic, assign) OverlayViewPanningMode OverlayViewPanningMode;
+@property (nonatomic, assign) kOverlayViewPanningMode kOverlayViewPanningMode;
 
 //是否是透明区域
 @property (nonatomic, assign) BOOL isCleanRect;
@@ -51,11 +51,8 @@ static CGSize const minSize = {40, 40};
 
 @implementation CropperView
 
-- (instancetype)initWithFrame:(CGRect)frame
-              image:(UIImage *)image
-          rectArray:(NSArray *)rectArray {
-    self = [super initWithFrame:frame];
-    if (self) {
+- (instancetype)initWithFrame:(CGRect)frame image:(UIImage *)image rectArray:(NSArray *)rectArray {
+    if (self = [super initWithFrame:frame]) {
         self.backgroundColor = [UIColor blackColor];
         self.image = image;
         self.whichRect = 0;
@@ -101,7 +98,6 @@ static CGSize const minSize = {40, 40};
 }
 
 - (void)addCropRect:(CGRect)rect {
-    
     UILabel *lable = [[UILabel alloc] initWithFrame:rect];
     lable.textAlignment = NSTextAlignmentCenter;
     lable.font = [UIFont systemFontOfSize:15];
@@ -115,7 +111,6 @@ static CGSize const minSize = {40, 40};
 }
 
 - (void)removeCropRectByIndex:(NSInteger)index {
-    
     UILabel *lable = [self.overlayView viewWithTag:1000 + index];
     [lable removeFromSuperview];
     
@@ -132,13 +127,12 @@ static CGSize const minSize = {40, 40};
     
     for (int i = 0; i < self.overlayView.rectArray.count; i++) {
         rect = CGRectFromString(self.overlayView.rectArray[i]);
-        [mArray addObject:[self cropImageWithScale:scale Rect:rect]];
+        [mArray addObject:[self cropImageWithScale:scale rect:rect]];
     }
     return mArray;
 }
 
-- (UIImage *)cropImageWithScale:(CGFloat)scale
-                           Rect:(CGRect)rect {
+- (UIImage *)cropImageWithScale:(CGFloat)scale rect:(CGRect)rect {
     rect.origin.x = (rect.origin.x - self.imageView.frame.origin.x) * scale;
     rect.origin.y = (rect.origin.y - self.imageView.frame.origin.y) * scale;
     rect.size.width *= scale;
@@ -238,7 +232,7 @@ static CGSize const minSize = {40, 40};
                 self.overlayView.whichRect = i;
                 edgeCount += 1;
                 maxCount += 1;
-                self.OverlayViewPanningMode = [self getOverlayViewPanningModeByPoint:point];
+                self.kOverlayViewPanningMode = [self getkOverlayViewPanningModeByPoint:point];
             }
             self.overlayView.clearRect = storeRect;
         }
@@ -264,7 +258,7 @@ static CGSize const minSize = {40, 40};
                 self.isCenterCleanRect = YES;
             } else {
                 self.isCenterCleanRect = NO;
-                self.OverlayViewPanningMode = [self getOverlayViewPanningModeByPoint:point];
+                self.kOverlayViewPanningMode = [self getkOverlayViewPanningModeByPoint:point];
             }
             self.overlayView.clearRect = storeRect;
         }
@@ -286,7 +280,6 @@ static CGSize const minSize = {40, 40};
         //        [self panImage:sender];
     }
     // Reset points
-    
     [sender setTranslation:CGPointZero inView:self];
 }
 
@@ -295,17 +288,17 @@ static CGSize const minSize = {40, 40};
     CGPoint d = [sender translationInView:self];
     CGRect oldClearRect = self.overlayView.clearRect;
     CGRect newClearRect = self.overlayView.clearRect;
-    if (self.OverlayViewPanningMode & OverlayViewPanningModeLeft) {
+    if (self.kOverlayViewPanningMode & kOverlayViewPanningModeLeft) {
         newClearRect.origin.x += d.x;
         newClearRect.size.width -= d.x;
-    } else if (self.OverlayViewPanningMode & OverlayViewPanningModeRight) {
+    } else if (self.kOverlayViewPanningMode & kOverlayViewPanningModeRight) {
         newClearRect.size.width += d.x;
     }
     
-    if (self.OverlayViewPanningMode & OverlayViewPanningModeTop) {
+    if (self.kOverlayViewPanningMode & kOverlayViewPanningModeTop) {
         newClearRect.origin.y += d.y;
         newClearRect.size.height -= d.y;
-    } else if (self.OverlayViewPanningMode & OverlayViewPanningModeBottom) {
+    } else if (self.kOverlayViewPanningMode & kOverlayViewPanningModeBottom) {
         newClearRect.size.height += d.y;
     }
     
@@ -366,25 +359,25 @@ static CGSize const minSize = {40, 40};
 }
 
 #pragma mark - 蒙板手势状态
-- (OverlayViewPanningMode)getOverlayViewPanningModeByPoint:(CGPoint)point {
+- (kOverlayViewPanningMode)getkOverlayViewPanningModeByPoint:(CGPoint)point {
     if (CGRectContainsPoint(self.overlayView.topLeftCorner, point)) {
-        return (OverlayViewPanningModeLeft | OverlayViewPanningModeTop);
+        return (kOverlayViewPanningModeLeft | kOverlayViewPanningModeTop);
     } else if (CGRectContainsPoint(self.overlayView.topRightCorner, point)) {
-        return (OverlayViewPanningModeRight | OverlayViewPanningModeTop);
+        return (kOverlayViewPanningModeRight | kOverlayViewPanningModeTop);
     } else if (CGRectContainsPoint(self.overlayView.bottomLeftCorner, point)) {
-        return (OverlayViewPanningModeLeft | OverlayViewPanningModeBottom);
+        return (kOverlayViewPanningModeLeft | kOverlayViewPanningModeBottom);
     } else if (CGRectContainsPoint(self.overlayView.bottomRightCorner, point)) {
-        return (OverlayViewPanningModeRight | OverlayViewPanningModeBottom);
+        return (kOverlayViewPanningModeRight | kOverlayViewPanningModeBottom);
     } else if (CGRectContainsPoint(self.overlayView.topEdgeRect, point)) {
-        return OverlayViewPanningModeTop;
+        return kOverlayViewPanningModeTop;
     } else if (CGRectContainsPoint(self.overlayView.rightEdgeRect, point)) {
-        return OverlayViewPanningModeRight;
+        return kOverlayViewPanningModeRight;
     } else if (CGRectContainsPoint(self.overlayView.bottomEdgeRect, point)) {
-        return OverlayViewPanningModeBottom;
+        return kOverlayViewPanningModeBottom;
     } else if (CGRectContainsPoint(self.overlayView.leftEdgeRect, point)) {
-        return OverlayViewPanningModeLeft;
+        return kOverlayViewPanningModeLeft;
     }
-    return OverlayViewPanningModeNone;
+    return kOverlayViewPanningModeNone;
 }
 
 - (BOOL)shouldRevertX {
@@ -452,8 +445,7 @@ static CGSize const minSize = {40, 40};
 - (void)pinchGesture:(UIPinchGestureRecognizer *)sender {
     CGFloat newScale = self.currentScale * sender.scale;
     CGRect oldImageFrame = self.imageView.frame;
-    CGSize newSize = CGSizeMake(newScale * self.baseRect.size.width,
-                                newScale * self.baseRect.size.height);
+    CGSize newSize = CGSizeMake(newScale * self.baseRect.size.width, newScale * self.baseRect.size.height);
     
     // Update frame
     CGRect newFrame = self.imageView.frame;
@@ -461,10 +453,8 @@ static CGSize const minSize = {40, 40};
     self.imageView.frame = newFrame;
     
     // Move center
-    CGPoint d = CGPointMake((oldImageFrame.size.width - newFrame.size.width) / 2.0f,
-                            (oldImageFrame.size.height - newFrame.size.height) / 2.0f);
-    self.imageView.center = CGPointMake(self.imageView.center.x + d.x,
-                                        self.imageView.center.y + d.y);
+    CGPoint d = CGPointMake((oldImageFrame.size.width - newFrame.size.width) / 2.0f, (oldImageFrame.size.height - newFrame.size.height) / 2.0f);
+    self.imageView.center = CGPointMake(self.imageView.center.x + d.x, self.imageView.center.y + d.y);
     
     if (([self shouldRevertX] || [self shouldRevertY])) {
         self.imageView.frame = oldImageFrame;
@@ -475,13 +465,5 @@ static CGSize const minSize = {40, 40};
     // Reset scale
     sender.scale = 1;
 }
-
-/*
- // Only override drawRect: if you perform custom drawing.
- // An empty implementation adversely affects performance during animation.
- - (void)drawRect:(CGRect)rect {
- // Drawing code
- }
- */
 
 @end

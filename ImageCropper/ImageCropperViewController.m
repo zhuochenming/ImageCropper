@@ -16,29 +16,39 @@
 @implementation ImageCropperViewController
 
 - (void)viewDidLoad {
-    
     self.view.backgroundColor = [UIColor whiteColor];
     self.title = @"多裁切框裁剪图片";
     
+    CGFloat imageHeight = (self.view.frame.size.height - 150) / 2.0;
+    for (NSInteger i = 0; i < 2; i++) {
+        UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(10, 30 + (imageHeight + 10) * i, self.view.frame.size.width - 20, imageHeight)];
+        imageView.tag = 1000 + i;
+        imageView.contentMode = UIViewContentModeScaleAspectFit;
+        [self.view addSubview:imageView];
+    }
+
     UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
-    [button setTitle:@"Demo" forState:UIControlStateNormal];
-    button.frame = CGRectMake(0, 0, 100, 30);
+    [button setTitle:@"点我" forState:UIControlStateNormal];
+    
+    UIView *imageView = [self.view viewWithTag:1001];
+    button.frame = CGRectMake((CGRectGetWidth(self.view.frame) - 100) / 2.0, CGRectGetMaxY(imageView.frame) + 30, 100, 30);
     [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     button.backgroundColor = [UIColor orangeColor];
     [button addTarget:self action:@selector(buttonTocuh) forControlEvents:UIControlEventTouchUpInside];
-    button.center = self.view.center;
-    
     [self.view addSubview:button];
-
-    // Do any additional setup after loading the view.
 }
 
 - (void)buttonTocuh {
     CropperViewController *crop = [CropperViewController new];
     crop.image = [UIImage imageNamed:@"a.jpg"];
     
+    __weak typeof(self) weakSelf = self;
     [crop done:^(NSArray *imageArray) {
-        NSLog(@"%ld", imageArray.count);
+        for (NSInteger i = 0; i < imageArray.count; i++) {
+            UIImageView *imageView = [weakSelf.view viewWithTag:1000 + i];
+            imageView.image = imageArray[i];
+        }
+        [weakSelf.navigationController popViewControllerAnimated:YES];
     }];
     
     [self.navigationController pushViewController:crop animated:YES];
