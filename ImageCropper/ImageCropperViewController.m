@@ -24,9 +24,11 @@
         UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(10, 30 + (imageHeight + 10) * i, self.view.frame.size.width - 20, imageHeight)];
         imageView.tag = 1000 + i;
         imageView.contentMode = UIViewContentModeScaleAspectFit;
+        imageView.alpha = 0.5;
+        imageView.backgroundColor = [UIColor blackColor]; 
         [self.view addSubview:imageView];
     }
-
+    
     UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
     [button setTitle:@"点我" forState:UIControlStateNormal];
     
@@ -64,13 +66,13 @@
 }
 
 /*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
+ #pragma mark - Navigation
+ 
+ // In a storyboard-based application, you will often want to do a little preparation before navigation
+ - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+ // Get the new view controller using [segue destinationViewController].
+ // Pass the selected object to the new view controller.
+ }
+ */
 
 @end

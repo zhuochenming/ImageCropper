@@ -13,15 +13,16 @@
 @property (nonatomic, assign) CGRect clearRect;
 
 //拐角
-@property (readonly) CGRect topLeftCorner;
-@property (readonly) CGRect topRightCorner;
-@property (readonly) CGRect bottomLeftCorner;
-@property (readonly) CGRect bottomRightCorner;
+@property (nonatomic, assign, readonly) CGRect topLeftCorner;
+@property (nonatomic, assign, readonly) CGRect topRightCorner;
+@property (nonatomic, assign, readonly) CGRect bottomLeftCorner;
+@property (nonatomic, assign, readonly) CGRect bottomRightCorner;
+
 //边缘
-@property (readonly) CGRect topEdgeRect;
-@property (readonly) CGRect rightEdgeRect;
-@property (readonly) CGRect bottomEdgeRect;
-@property (readonly) CGRect leftEdgeRect;
+@property (nonatomic, assign, readonly) CGRect topEdgeRect;
+@property (nonatomic, assign, readonly) CGRect rightEdgeRect;
+@property (nonatomic, assign, readonly) CGRect bottomEdgeRect;
+@property (nonatomic, assign, readonly) CGRect leftEdgeRect;
 
 //透明区域数组
 @property (nonatomic, strong) NSMutableArray *rectArray;
